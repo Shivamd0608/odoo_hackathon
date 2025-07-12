@@ -5,6 +5,7 @@ const userRoutes = require("./routes/user");
 const swapRoutes = require("./routes/swap");
 const chatRoutes = require("./routes/chat");
 const ratingRoutes = require("./routes/rating");
+const adminRoutes = require("./routes/admin");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/swap", swapRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/rating", ratingRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.send("Skill Swap API is running");
