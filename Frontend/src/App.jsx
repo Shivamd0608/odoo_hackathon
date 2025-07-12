@@ -3,6 +3,8 @@ import LoginPage from './components/Aminlogin/AdminLogin';
 import UserLoginPage from "./components/Login/Login";
  import Dashboard from './components/Dashboard/DashBoard';
  import Homepage from "./components/Homepage/Homepage";  
+import ExplorePage from "./components/ExplorePage/ExplorePage";
+ // import UserRegistrationPage from "./components/UserRegistration/UserRegistrationPage";
 
 const App = () => {
   return (
@@ -17,9 +19,11 @@ const App = () => {
        
         {/* Homepage */}
         <Route path="/" element={<Homepage />} />
+         {/* explore  */}
+        <Route path="/explore" element={<ExplorePage/>} />
        
-
-
+<Route path="/" element={<Homepage />} />
+   
 <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
