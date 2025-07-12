@@ -1,0 +1,236 @@
+/* AdminLogin.css */
+
+/* --- Color Palette Variables (reused from Homepage.css for consistency) --- */
+:root {
+    --color-dark-bg: #101010;
+    --color-dark-surface: #1a1a1a;
+    --color-dark-card: #282828;
+    --color-light-text: #E4E1DF;
+    --color-primary-blue: #3339AD; /* Main accent color */
+    --color-gray-text: #a0a0a0;
+    --color-white: #ffffff;
+    --color-black-transparent: rgba(0, 0, 0, 0.75);
+    --color-button-hover-dark: #2a308c;
+    --color-error-red: #dc2626; /* For error messages */
+}
+
+/* --- Base Container for Login/Registration Pages --- */
+.container {
+    min-height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column; /* Allow message to be below */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    background-color: var(--color-dark-bg); /* Dark background */
+    padding: 1rem; /* Add some padding on smaller screens */
+    color: var(--color-light-text); /* Default text color */
+    overflow: hidden; /* Prevent scroll issues from circles */
+    font-family: 'Inter', sans-serif; /* Consistent font */
+}
+
+/* --- Main Login/Registration Card Container (Glassmorphism Effect) --- */
+.login-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px; /* Max width for the form */
+    background: rgba(40, 40, 40, 0.6); /* Semi-transparent dark card background */
+    border-radius: 1rem; /* Rounded corners */
+    border: 1px solid rgba(68, 68, 68, 0.4); /* Subtle border for glass effect */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Stronger shadow for depth */
+    backdrop-filter: blur(10px); /* Glassmorphism blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    padding: 2rem; /* Inner padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden; /* Hide overflowing circles */
+    z-index: 1; /* Ensure it's above circles */
+}
+
+/* --- Decorative Circles for Background --- */
+.circle {
+    position: absolute;
+    background: linear-gradient(135deg, var(--color-primary-blue), rgba(51, 57, 173, 0.5)); /* Gradient for circles */
+    border-radius: 50%;
+    filter: blur(80px); /* Soft blur effect */
+    opacity: 0.6;
+    z-index: 0; /* Behind the login container */
+}
+
+.circle-one {
+    width: 150px;
+    height: 150px;
+    top: -50px;
+    left: -50px;
+}
+
+.circle-two {
+    width: 200px;
+    height: 200px;
+    bottom: -70px;
+    right: -70px;
+}
+
+/* --- Form Content Styling --- */
+.form-container {
+    position: relative; /* To ensure content is above circles */
+    z-index: 10; /* Higher than circles */
+    width: 100%;
+    text-align: center;
+}
+
+.illustration {
+    width: 120px; /* Adjust size as needed */
+    height: auto;
+    margin-bottom: 1.5rem; /* Space below illustration */
+    border-radius: 0.5rem; /* Slightly rounded for consistency */
+}
+
+.login-container h2 {
+    font-size: 2rem; /* Larger heading */
+    font-weight: 700; /* Bold */
+    margin-bottom: 2rem; /* Space below heading */
+    color: var(--color-white); /* Ensure it's visible against dark background */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Subtle text shadow */
+    opacity: 1; /* Ensure full opacity for h2 */
+}
+
+/* --- Form Inputs --- */
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; /* Space between inputs */
+}
+
+.login-container form input {
+    display: block;
+    padding: 0.8rem 1rem; /* Comfortable padding */
+    width: 100%;
+    color: var(--color-light-text); /* Input text color */
+    outline: none;
+    background-color: rgba(145, 145, 145, 0.12); /* Slightly transparent dark input background */
+    border: 1px solid rgba(68, 68, 68, 0.6); /* Border for inputs */
+    border-radius: 0.5rem; /* Rounded input fields */
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    font-size: 15px;
+    backdrop-filter: blur(5px); /* Subtle blur for inputs */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    margin: 0; /* Reset margin from previous conflicting rule */
+}
+
+.login-container form input::placeholder {
+    color: var(--color-gray-text); /* Placeholder text color */
+    opacity: 0.8;
+}
+
+.login-container form input:focus {
+    box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.2);
+    border-color: var(--color-primary-blue); /* Accent border on focus */
+    box-shadow: 0 0 0 2px rgba(51, 57, 173, 0.5); /* Blue glow on focus */
+    animation: wobble 0.3s ease-in; /* Keep wobble animation */
+}
+
+.login-container form input:disabled {
+    background-color: rgba(26, 26, 26, 0.4);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* --- Submit Button --- */
+.login-container form button[type="submit"] {
+    background-color: var(--color-primary-blue); /* Primary blue button */
+    color: var(--color-white);
+    display: block;
+    padding: 0.9rem 1.5rem; /* Generous padding */
+    border: none;
+    border-radius: 0.5rem;
+    outline: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 1.5rem; /* Space above button */
+    margin-bottom: 0; /* Remove bottom margin to prevent extra space */
+    transition: all 0.2s ease-in-out; /* Smoother transition */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Initial shadow */
+}
+
+.login-container form button[type="submit"]:hover {
+    background-color: var(--color-button-hover-dark); /* Darker shade on hover */
+    box-shadow: 0 0 16px 2px rgba(0, 0, 0, 0.3); /* More pronounced shadow on hover */
+    transform: scale(1.02); /* Slight scale on hover */
+}
+
+.login-container form button[type="submit"]:disabled {
+    background-color: var(--color-gray-text);
+    cursor: not-allowed;
+    opacity: 0.8;
+    transform: scale(1); /* No scale when disabled */
+    box-shadow: none;
+}
+
+/* --- Message (Error/Success) --- */
+.message {
+    text-align: center;
+    margin-top: 1.5rem; /* Space above message */
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-error-red); /* Red for error messages */
+    background-color: rgba(220, 38, 38, 0.1); /* Light red background */
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-error-red);
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+/* --- Animations --- */
+@keyframes wobble {
+    0% { transform: translateX(0%); }
+    15% { transform: translateX(-5%); }
+    30% { transform: translateX(5%); }
+    45% { transform: translateX(-3%); }
+    60% { transform: translateX(3%); }
+    75% { transform: translateX(-2%); }
+    90% { transform: translateX(2%); }
+    100% { transform: translateX(0%); }
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 600px) {
+    .login-container {
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+    }
+    .login-container h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+    .login-container form input {
+        padding: 0.7rem 0.8rem;
+    }
+    .login-container form button[type="submit"] {
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+        margin-top: 1rem;
+    }
+    .illustration {
+        width: 100px;
+        top: -10%;
+    }
+    .circle-one {
+        width: 100px;
+        height: 100px;
+        top: -30px;
+        left: -30px;
+    }
+    .circle-two {
+        width: 150px;
+        height: 150px;
+        bottom: -50px;
+        right: -50px;
+    }
+}

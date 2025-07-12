@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import '../components/AdminLogin.css'; // Assuming you have a CSS file for styling
 

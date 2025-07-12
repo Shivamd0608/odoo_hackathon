@@ -1,23 +1,47 @@
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import '../components/AdminLogin.css'; // Reuse same CSS
+import '../components/AdminLogin.css'; // Your CSS
 
 const UserLoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = await login(username, password);
 
-    if (data.success) {
-      setTimeout(() => navigate("/user-dashboard"), 100); 
-    } else {
-      setMessage(data.message);
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/auth/login", {
+        username,
+        password,
+      });
+
+      if (response.data.success) {
+        // ✅ Optional: store token or user info
+        // localStorage.setItem("token", response.data.token);
+
+        // ✅ Clear form
+        setUsername("");
+        setPassword("");
+
+        // ✅ Navigate after a small delay
+        setTimeout(() => navigate("/user-dashboard"), 100);
+      } else {
+        setMessage(response.data.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message ||
+        "Server not responding. Please try again later."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,6 +63,7 @@ const UserLoginPage = () => {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="USERNAME"
               required
+              disabled={loading}
             />
             <input
               type="password"
@@ -46,9 +71,10 @@ const UserLoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="PASSWORD"
               required
+              disabled={loading}
             />
-            <button className="opacity" type="submit">
-              SUBMIT
+            <button className="opacity" type="submit" disabled={loading}>
+              {loading ? "Logging in..." : "SUBMIT"}
             </button>
           </form>
         </div>
