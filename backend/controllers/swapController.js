@@ -1,5 +1,8 @@
 const User = require("../models/User");
 const Swap = require("../models/Swap");
+const evaluateBadge = require("../utils/badgeHelper");
+const mongoose = require("mongoose");
+const Rating = require("../models/Rating");
 
 const exploreUsers = async (req, res) => {
   const { skill } = req.query;
@@ -83,17 +86,52 @@ const markDelivered = async (req, res) => {
 const confirmDelivery = async (req, res) => {
   const { id } = req.params;
 
+  // 1. Validate swap ID
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid Swap ID" });
+  }
+
   const swap = await Swap.findById(id);
-  if (!swap) return res.status(404).json({ message: "Swap not found" });
+  if (!swap) {
+    return res.status(404).json({ message: "Swap not found" });
+  }
 
-  if (!swap.receiver.equals(req.user._id))
-    return res.status(403).json({ message: "Only receiver can confirm" });
+  // 2. Ensure only receiver can confirm
+  if (!swap.receiver.equals(req.user._id)) {
+    return res.status(403).json({ message: "Only receiver can confirm delivery" });
+  }
 
+  // 3. Update swap status
   swap.status = "confirmed";
   swap.confirmedAt = new Date();
   await swap.save();
 
-  res.status(200).json(swap);
+  // 4. Update both sender and receiver stats
+  const participants = [swap.sender, swap.receiver];
+  for (const userId of participants) {
+    const user = await User.findById(userId);
+
+    // Increment confirmed swap count
+    user.completedSwaps = (user.completedSwaps || 0) + 1;
+
+    // Recalculate average rating
+    const ratings = await Rating.find({ ratedUser: user._id });
+    const avgRating = ratings.length
+      ? ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length
+      : 0;
+
+    user.avgRating = parseFloat(avgRating.toFixed(2));
+
+    // Evaluate and assign badge
+    user.badge = evaluateBadge({
+      completedSwaps: user.completedSwaps,
+      avgRating: user.avgRating,
+    });
+
+    await user.save();
+  }
+
+  res.status(200).json({ message: "Delivery confirmed and stats updated", swap });
 };
 
 

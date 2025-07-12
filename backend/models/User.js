@@ -32,6 +32,8 @@ const userSchema = new mongoose.Schema({
   photoUrl: String,
   bannerUrl: String,
 
+  
+
   // Social
   linkedin: String,
   website: String,
@@ -42,7 +44,22 @@ const userSchema = new mongoose.Schema({
   // System
   isBanned: { type: Boolean, default: false },
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+
+  badge: {
+  type: String,
+  enum: ["Beginner", "Starter", "Professional", "Expert"],
+  default: "Beginner"},
+    
+  avgRating: {
+  type: Number,
+  default: 0},
+    
+  completedSwaps: {
+  type: Number,
+  default: 0
+}
+
 });
 
 module.exports = mongoose.model("User", userSchema);
