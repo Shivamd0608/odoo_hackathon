@@ -4,6 +4,9 @@ const Swap = require("../models/Swap");
 const Message = require("../models/Message");
 const Rating = require("../models/Rating");
 const { Parser } = require("json2csv");
+// const Rating = require("../models/Rating");
+// const Skill = require("../models/Skill");
+
 
 exports.rejectSkill = async (req, res) => {
   const skill = await Skill.findById(req.params.skillId);
@@ -61,4 +64,40 @@ exports.downloadReport = async (req, res) => {
   res.header("Content-Type", "text/csv");
   res.attachment(`${type}_report.csv`);
   res.send(csv);
+};
+
+exports.getAnalytics = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalSwaps = await Swap.countDocuments();
+
+    const swapStatuses = await Swap.aggregate([
+      { $group: { _id: "$status", count: { $sum: 1 } } }
+    ]);
+
+    const avgRatingData = await Rating.aggregate([
+      { $group: { _id: null, avgRating: { $avg: "$rating" } } }
+    ]);
+    const avgRating = avgRatingData[0]?.avgRating?.toFixed(2) || "0.00";
+
+    const popularSkills = await Skill.aggregate([
+      { $group: { _id: "$name", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 5 }
+    ]);
+
+    res.json({
+      totalUsers,
+      totalSwaps,
+      swapStatusCount: swapStatuses.reduce((acc, s) => {
+        acc[s._id] = s.count;
+        return acc;
+      }, {}),
+      avgRating,
+      topSkills: popularSkills
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch analytics" });
+  }
 };
