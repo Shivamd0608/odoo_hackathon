@@ -27,6 +27,7 @@ build/
 uploads/
 public/uploads/
 
+
 # Coverage (if using Jest or nyc)
 coverage/
 

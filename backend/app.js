@@ -3,7 +3,9 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const swapRoutes = require("./routes/swap");
-
+const chatRoutes = require("./routes/chat");
+const ratingRoutes = require("./routes/rating");
+const adminRoutes = require("./routes/admin");
 
 const app = express();
 
@@ -14,7 +16,10 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/swap", swapRoutes); 
+app.use("/api/swap", swapRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/rating", ratingRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.send("Skill Swap API is running");
